@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/26 13:26:16 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/27 13:14:36 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/28 14:42:39 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static t_cpu_type_names		g_cpu_names[] = {
 	{ CPU_TYPE_ARM, "arm" },
 	{ CPU_TYPE_ARM64, "arm64" },
 	{ CPU_TYPE_MC98000, "mc98000" },
-	{ CPU_TYPE_POWERPC, "powerPC" },
-	{ CPU_TYPE_POWERPC64, "powerPC64" },
+	{ CPU_TYPE_POWERPC, "ppc" },
+	{ CPU_TYPE_POWERPC64, "ppc64" },
 };
 
 static t_u32tos				g_magic_names[] = {

@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 14:42:14 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/27 14:49:57 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/28 15:32:52 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define MT_ERRNO_OPEN_FILE		2
 # define MT_ERRNO_NO_ARGUMENT	3
 # define MT_ERRNO_FSTAT			4
+# define MT_ERRNO_OBJ			5
 
 
 typedef unsigned char		t_u8;
@@ -64,16 +65,25 @@ typedef struct				s_u32tos
 int							mt_store_error(int errno, char *msg);
 int							mt_perror();
 
+int							dump_segments(t_file *file);
+
 int							map_file(t_file *file);
 int							unmap_file(t_file *file);
 
 t_u32						read_magic(void *file, int offset);
 int							is_magic_64(t_u32 magic);
 int							should_swap_bytes(t_u32 magic);
+int							is_magic_ok(t_u32 magic);
 
 int							is_fat_magic(t_u32 magic);
 
 void						print_mach_header(struct mach_header *mh);
 void						print_mach_header64(struct mach_header_64 *mh);
+
+void						handle_archive(t_file *file);
+void						handle_fat(t_file *file, t_u32 magic, int shouap);
+
+const char					*get_cpu_name(cpu_type_t cpu);
+const char					*get_magic_name(t_u32 magic);
 
 #endif

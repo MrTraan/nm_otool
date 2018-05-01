@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 14:46:36 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/25 15:10:18 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/04/28 14:27:08 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int				map_file(t_file *file)
 		return mt_store_error(MT_ERRNO_OPEN_FILE, file->path);
 	if (fstat(fd, &stats) < 0)
 		return mt_store_error(MT_ERRNO_FSTAT, strerror(errno));
-	if ((ptr = mmap(0, stats.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
+	if ((ptr = mmap(0, stats.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
 		return mt_store_error(MT_ERRNO_MEMORY, strerror(errno));
 	file->data = (char *)ptr;
 	file->size = stats.st_size;

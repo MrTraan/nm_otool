@@ -6,20 +6,20 @@
 #    By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/15 18:16:02 by ngrasset          #+#    #+#              #
-#    Updated: 2018/04/27 16:01:54 by ngrasset         ###   ########.fr        #
+#    Updated: 2018/04/28 14:51:22 by ngrasset         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_otool
 
 C_DIR = src
-C_FILES = src/main.c src/errors.c src/file.c src/magic.c src/debug_header.c \
-			src/fat.c
+C_FILES = src/main_otool.c src/errors.c src/file.c src/magic.c src/debug_header.c \
+			src/fat.c src/archives.c
 
 O_DIR =	.tmp/obj
 O_FILES = $(C_FILES:$(C_DIR)%.c=$(O_DIR)%.o)
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -fsanitize=address
 INCLUDES = -I ./includes -I ./libft/includes  -I ./ft_printf/includes
 LIB = -L ./libft -l ft -L ./ft_printf -l ftprintf
 
