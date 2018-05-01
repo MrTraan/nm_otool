@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 14:39:56 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/05/01 15:57:16 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/05/01 17:54:42 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,63 +14,18 @@
 #include <stdio.h>
 #include <ar.h>
 
-void	dump_text_section64(t_file *file, struct section_64 *sect)
+void	get_sectnames(t_file *file, int offset, int is_swap, t_u32 ncmds, char *storage)
 {
-	t_u32 offset = sect->offset;
-	t_u32 i = 0;
-
-	ft_printf("%s:\nContents of (__TEXT,__text) section\n", file->path);
-	while (i < sect->size)
-	{
-		ft_printf("%016llx\t", sect->addr + i);
-		for (t_u32 j = 0; j < 16 && (i + (j * sizeof(t_u8))) < sect->size; j++)
-		{
-			t_u8 *c = (t_u8 *)(file->data + offset + i + (j * sizeof(t_u8)));
-			ft_printf("%02x ", *c);
-		}
-		ft_printf("\n");
-		i += 16 * sizeof(t_u8);
-	}
-}
-
-void	dump_text_section(t_file *file, struct section *sect)
-{
-	t_u32 offset = sect->offset;
-	t_u32 i = 0;
-
-	ft_printf("%s:\nContents of (__TEXT,__text) section\n", file->path);
-	while (i < sect->size)
-	{
-		ft_printf("%08x\t", sect->addr + i);
-		for (t_u32 j = 0; j < 16 && (i + (j * sizeof(t_u8))) < sect->size; j++)
-		{
-			t_u8 *c = (t_u8 *)(file->data + offset + i + (j * sizeof(t_u8)));
-			ft_printf("%02x ", *c);
-		}
-		ft_printf("\n");
-		i += 16 * sizeof(t_u8);
-	}
-}
-
-
-void	dump_segm_commands(t_file *file, int offset, int is_swap, t_u32 ncmds)
-{
-	t_u32	i;
+	t_u32		i;
+	t_u32		k;
 
 	i = 0;
+	k = 0;
 	while (i < ncmds)
 	{
 		struct load_command *cmd = (struct load_command *)(file->data + offset);
 		if (is_swap)
 			swap_load_command(cmd, 0);
-		if (cmd->cmd == LC_SYMTAB)
-		{
-			struct symtab_command *sc;
-
-			sc = (struct symtab_command *)cmd;
-			printf("Nb symbols: %d\n", sc->nsyms);
-			exit (0);
-		}
 		if (cmd->cmd == LC_SEGMENT_64)
 		{
 			struct segment_command_64 *segment = (struct segment_command_64 *)
@@ -84,8 +39,19 @@ void	dump_segm_commands(t_file *file, int offset, int is_swap, t_u32 ncmds)
 
 				if (is_swap)
 					swap_section_64(sect, 1, 0);
-				if (ft_strcmp(sect->sectname, "__text") == 0)
-					dump_text_section64(file, sect);
+
+				if (k < 255)
+				{
+					if (ft_strncmp(sect->sectname, SECT_TEXT, 16) == 0)
+						storage[k] = 't';
+					else if (ft_strncmp(sect->sectname, SECT_DATA, 16) == 0)
+						storage[k] = 'd';
+					else if (ft_strncmp(sect->sectname, SECT_BSS, 16) == 0)
+						storage[k] = 'b';
+					else
+						dprintf("%d: Ignored div %s\n", k, sect->sectname);
+					k++;
+				}
 
 				suboffset += sizeof(struct section_64);
 			}
@@ -106,13 +72,84 @@ void	dump_segm_commands(t_file *file, int offset, int is_swap, t_u32 ncmds)
 				if (is_swap)
 					swap_section(sect, 1, 0);
 
-				if (ft_strcmp(sect->sectname, "__text") == 0)
-					dump_text_section(file, sect);
+				if (k < 255)
+				{
+					if (ft_strncmp(sect->sectname, SECT_TEXT, 16) == 0)
+						storage[k] = 't';
+					else if (ft_strncmp(sect->sectname, SECT_DATA, 16) == 0)
+						storage[k] = 'd';
+					else if (ft_strncmp(sect->sectname, SECT_BSS, 16) == 0)
+						storage[k] = 'b';
+					else
+						dprintf("%d: Ignored div %s\n", k, sect->sectname);
+					k++;
+				}
 
 				suboffset += sizeof(struct section);
 			}
 			if (is_swap)
 				swap_load_command(cmd, 0);
+		}
+		offset += cmd->cmdsize;
+		i++;
+	}
+}
+
+void	dump_segm_commands(t_file *file, int offset, int is_swap, t_u32 ncmds)
+{
+	t_u32	i;
+	char	sectnames[255];
+
+	ft_memset(sectnames, 0, 255);
+	get_sectnames(file, offset, is_swap, ncmds, sectnames);
+
+	i = 0;
+	while (i < ncmds)
+	{
+		struct load_command *cmd = (struct load_command *)(file->data + offset);
+		if (is_swap)
+			swap_load_command(cmd, 0);
+		if (cmd->cmd == LC_SYMTAB)
+		{
+			struct symtab_command *sc;
+
+			sc = (struct symtab_command *)cmd;
+			if (is_swap)
+				swap_symtab_command(sc, 0);
+
+			struct nlist_64 *array = (struct nlist_64 *)(file->data + sc->symoff);
+
+			for (t_u32 i = 0; i < sc->nsyms; i++)
+			{
+				t_u8 type;
+				t_u8 sect;
+
+				type = array[i].n_type;
+				sect = array[i].n_sect;
+
+				char symbol_char = 0;
+
+				if ((type & N_TYPE) == N_UNDF)
+					symbol_char = 'u';
+				if ((type & N_TYPE) == N_ABS)
+					symbol_char = 'a';
+				if ((type & N_TYPE) == N_SECT)
+				{
+					if (sect < 255 && sect >= 1)
+						symbol_char = sectnames[sect - 1];
+				}
+				if ((type & N_TYPE) == N_PBUD)
+					symbol_char = 'u';
+				if ((type & N_TYPE) == N_INDR)
+					symbol_char = 'i';
+				if (type & N_EXT)
+					symbol_char -= 32;
+				if ((type & N_TYPE) == N_UNDF)
+					printf("%16c %c %s\n", ' ', symbol_char, (char *)(file->data + sc->stroff + array[i].n_un.n_strx));
+				else
+					printf("%016llx %c %s\n", array[i].n_value, symbol_char, (char *)(file->data + sc->stroff + array[i].n_un.n_strx));
+			}
+			exit (0);
 		}
 		offset += cmd->cmdsize;
 		i++;
@@ -164,6 +201,8 @@ int		dump_segments(t_file *file)
 		return (0);
 	}
 	is_64 = is_magic_64(magic);
+	file->is_64 = is_64;
+	file->is_swap = should_swap;
 	if (is_64)
 		dump_mach_header_64(file, 0, should_swap);
 	else

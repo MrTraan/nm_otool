@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 14:42:14 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/28 15:32:52 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/05/01 17:35:13 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <mach-o/loader.h>
 # include <mach-o/fat.h>
 # include <mach-o/swap.h>
+# include <mach-o/nlist.h>
 # include <stdio.h>
 # include <ft_printf.h>
 
@@ -48,6 +49,8 @@ typedef struct				s_file
 	char					*data;
 	size_t					size;
 	char					*path;
+	char					is_swap;
+	char					is_64;
 }							t_file;
 
 typedef struct				s_cpu_type_names

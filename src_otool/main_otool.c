@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 14:39:56 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/05/01 15:42:08 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/05/01 17:39:50 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	dump_segm_commands(t_file *file, int offset, int is_swap, t_u32 ncmds)
 
 				if (is_swap)
 					swap_section_64(sect, 1, 0);
-				if (ft_strcmp(sect->sectname, "__text") == 0)
+				if (ft_strncmp(sect->sectname, "__text", 16) == 0)
 					dump_text_section64(file, sect);
 
 				suboffset += sizeof(struct section_64);
@@ -98,7 +98,7 @@ void	dump_segm_commands(t_file *file, int offset, int is_swap, t_u32 ncmds)
 				if (is_swap)
 					swap_section(sect, 1, 0);
 
-				if (ft_strcmp(sect->sectname, "__text") == 0)
+				if (ft_strncmp(sect->sectname, "__text", 16) == 0)
 					dump_text_section(file, sect);
 
 				suboffset += sizeof(struct section);
