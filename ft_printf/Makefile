@@ -6,7 +6,7 @@
 #    By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/03/03 14:54:05 by ngrasset          #+#    #+#              #
-#    Updated: 2018/04/27 13:45:08 by ngrasset         ###   ########.fr        #
+#    Updated: 2018/05/02 18:51:42 by ngrasset         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ LIBS = -L../libft -lft
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	make -C libft/
+	make -C ../libft/
 	ar -rc $(NAME) $^
 	libtool -static -o $(NAME) $(NAME) $(LIBS) 2>&-
 
