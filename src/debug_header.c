@@ -6,12 +6,11 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/26 13:26:16 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/05/02 13:53:26 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/05/02 17:08:07 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_nm.h>
-#include <stdio.h>
 
 static t_cpu_type_names		g_cpu_names[] = {
 	{ CPU_TYPE_I386, "i386" },
@@ -48,12 +47,11 @@ static t_u32tos				g_filetype_names[] = {
 
 const char	*get_cpu_name(cpu_type_t cpu)
 {
+	static int	size = sizeof(g_cpu_names) / sizeof(t_cpu_type_names);
 	int			i;
-	static int	cpu_type_names_size = sizeof(g_cpu_names) /
-		sizeof(t_cpu_type_names);
 
 	i = 0;
-	while (i < cpu_type_names_size)
+	while (i < size)
 	{
 		if (g_cpu_names[i].cpu_type == cpu)
 			return (g_cpu_names[i].name);
@@ -64,9 +62,8 @@ const char	*get_cpu_name(cpu_type_t cpu)
 
 const char	*get_magic_name(t_u32 magic)
 {
+	static int	magic_names_size = sizeof(g_magic_names) / sizeof(t_u32tos);
 	int			i;
-	static int	magic_names_size = sizeof(g_magic_names) /
-		sizeof(t_u32tos);
 
 	i = 0;
 	while (i < magic_names_size)
@@ -80,9 +77,8 @@ const char	*get_magic_name(t_u32 magic)
 
 const char	*get_filetype_name(t_u32 ft)
 {
+	static int	ft_names_size = sizeof(g_filetype_names) / sizeof(t_u32tos);
 	int			i;
-	static int	ft_names_size = sizeof(g_filetype_names) /
-		sizeof(t_u32tos);
 
 	i = 0;
 	while (i < ft_names_size)

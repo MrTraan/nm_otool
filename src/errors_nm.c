@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   errors_nm.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/14 13:20:14 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/28 15:34:13 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/05/02 18:37:31 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,15 @@ int				mt_store_error(int errno, char *msg)
 		sprintf(g_mt_error_buffer, "fstat error: %s\n", msg);
 	if (errno == MT_ERRNO_OBJ)
 		sprintf(g_mt_error_buffer, "%s: is not an object file\n", msg);
+	if (errno == MT_ERRNO_MMAP)
+		sprintf(g_mt_error_buffer, "Could not mmap file: %s\n", msg);
 	g_mt_errno = errno;
 	return (errno);
 }
 
-int				mt_perror()
+int				mt_perror(void)
 {
-	fprintf(stderr, "ft_nm error: %s", g_mt_error_buffer);
+	ft_putstr_fd("ft_nm error: ", 2);
+	ft_putstr_fd(g_mt_error_buffer, 2);
 	return (g_mt_errno);
 }
