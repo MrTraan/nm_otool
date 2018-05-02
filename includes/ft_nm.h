@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 14:42:14 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/05/02 11:04:39 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/05/02 14:26:12 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define MT_ERRNO_NO_ARGUMENT	3
 # define MT_ERRNO_FSTAT			4
 # define MT_ERRNO_OBJ			5
-
+# define DEFAULT_PATH			"a.out"
 
 typedef unsigned char		t_u8;
 typedef unsigned short		t_u16;
@@ -68,6 +68,7 @@ typedef struct				s_u32tos
 typedef struct				s_nm_line
 {
 	int						is_64;
+	int						is_undef;
 	t_u64					addr;
 	char					symbol;
 	char					*name;
@@ -88,13 +89,16 @@ int							is_magic_ok(t_u32 magic);
 
 int							is_fat_magic(t_u32 magic);
 
-void						print_mach_header(struct mach_header *mh);
-void						print_mach_header64(struct mach_header_64 *mh);
-
-void						handle_archive(t_file *file);
+void						handle_archive_otool(t_file *file);
+void						handle_archive_nm(t_file *file);
 void						handle_fat(t_file *file, t_u32 magic, int shouap);
 
 const char					*get_cpu_name(cpu_type_t cpu);
 const char					*get_magic_name(t_u32 magic);
+
+void						get_sectnames(t_file *file, int offset,
+								t_u32 ncmds, char *storage);
+
+void						*get_off(t_file *file, size_t offset);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/26 13:26:16 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/28 14:42:39 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/05/02 13:53:26 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,52 +92,4 @@ const char	*get_filetype_name(t_u32 ft)
 		i++;
 	}
 	return (NULL);
-}
-
-void		print_mach_header(struct mach_header *mh)
-{
-	const char	*cpu_name;
-	const char	*magic;
-	const char	*filetype;
-
-	magic = get_magic_name(mh->magic);
-	if (magic)
-		dprintf("magic: %s\n", magic);
-	else
-		dprintf("unkown magic: %X\n", mh->magic);
-	cpu_name = get_cpu_name(mh->cputype);
-	if (cpu_name)
-		dprintf("cputype: %s\n", cpu_name);
-	else
-		dprintf("cputype: %s\n", "Unknown cpu");
-	filetype = get_filetype_name(mh->filetype);
-	if (filetype)
-		dprintf("filetype: %s\n", filetype);
-	else
-		dprintf("Unkown filetype: %X\n", mh->filetype);
-	dprintf("ncmds: %u\nsizeofcmds: %u (%x)\n", mh->ncmds, mh->sizeofcmds, mh->sizeofcmds);
-}
-
-void		print_mach_header64(struct mach_header_64 *mh)
-{
-	const char	*cpu_name;
-	const char	*magic;
-	const char	*filetype;
-
-	magic = get_magic_name(mh->magic);
-	if (magic)
-		dprintf("magic: %s\n", magic);
-	else
-		dprintf("unkown magic: %X\n", mh->magic);
-	cpu_name = get_cpu_name(mh->cputype);
-	if (!cpu_name)
-		dprintf("cputype: %s\n", "Unknown cpu");
-	else
-		dprintf("cputype: %s\n", cpu_name);
-	filetype = get_filetype_name(mh->filetype);
-	if (filetype)
-		dprintf("filetype: %s\n", filetype);
-	else
-		dprintf("Unkown filetype: %X\n", mh->filetype);
-	dprintf("ncmds: %u\nsizeofcmds: %u (%x)\n", mh->ncmds, mh->sizeofcmds, mh->sizeofcmds);
 }

@@ -6,7 +6,7 @@
 #    By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/15 18:16:02 by ngrasset          #+#    #+#              #
-#    Updated: 2018/05/02 10:28:52 by ngrasset         ###   ########.fr        #
+#    Updated: 2018/05/02 14:10:05 by ngrasset         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME_NM = ft_nm
 
 C_DIR = src
 C_COMMON = src/errors.c src/file.c src/magic.c src/debug_header.c \
-			src/fat.c src/archives.c
+			src/fat.c src/archives.c src/offset.c
 C_OTOOL = $(C_COMMON) src/main_otool.c
 C_NM = $(C_COMMON) src/main_nm.c
 

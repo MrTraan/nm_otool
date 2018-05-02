@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 14:39:56 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/05/02 11:27:35 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/05/02 14:26:01 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ void	dump_mach_header(t_file *file, int offset, int is_swap)
 	mh = (struct mach_header *)(file->data + offset);
 	if (is_swap)
 		swap_mach_header(mh, 0);
-	print_mach_header(mh);
 	dump_segm_commands(file, offset + sizeof(struct mach_header), is_swap, mh->ncmds);
 }
 
@@ -129,7 +128,6 @@ void	dump_mach_header_64(t_file *file, int offset, int is_swap)
 	mh = (struct mach_header_64 *)(file->data + offset);
 	if (is_swap)
 		swap_mach_header_64(mh, 0);
-	print_mach_header64(mh);
 	dump_segm_commands(file, offset + sizeof(struct mach_header_64), is_swap, mh->ncmds);
 }
 
@@ -141,8 +139,7 @@ int		dump_segments(t_file *file)
 
 	if (file->size > SARMAG && ft_strncmp(file->data, ARMAG, SARMAG) == 0)
 	{
-		// todo
-		handle_archive(file);
+		handle_archive_otool(file);
 		return (0);
 	}
 	magic = read_magic(file->data, 0);
@@ -151,7 +148,6 @@ int		dump_segments(t_file *file)
 	should_swap = should_swap_bytes(magic);
 	if (is_fat_magic(magic))
 	{
-		// todo
 		handle_fat(file, magic, should_swap);
 		return (0);
 	}
