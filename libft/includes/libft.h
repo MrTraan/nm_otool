@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/23 11:27:25 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/04/27 13:47:11 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/05/02 10:50:27 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void				ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 void				ft_lstpush_back(t_list **alst, t_list *new);
+void				ft_lstsort(t_list *lst, int (*f)(t_list *a, t_list *b));
 
 /*
 ** Memory

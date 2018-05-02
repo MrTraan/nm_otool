@@ -6,7 +6,7 @@
 /*   By: ngrasset <ngrasset@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 14:42:14 by ngrasset          #+#    #+#             */
-/*   Updated: 2018/05/01 17:35:13 by ngrasset         ###   ########.fr       */
+/*   Updated: 2018/05/02 11:04:39 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,14 @@ typedef struct				s_u32tos
 	t_u32					value;
 	const char				*name;
 }							t_u32tos;
+
+typedef struct				s_nm_line
+{
+	int						is_64;
+	t_u64					addr;
+	char					symbol;
+	char					*name;
+}							t_nm_line;
 
 int							mt_store_error(int errno, char *msg);
 int							mt_perror();
